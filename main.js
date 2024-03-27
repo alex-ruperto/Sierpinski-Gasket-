@@ -7,15 +7,16 @@ import { ZoomController } from './zoom-controller.js';
 const canvas = document.getElementById("sierpinski-canvas");
 const gl = initWebGL(canvas);
 const numPoints = 50000
-let zoomController;
+let zoomController = new ZoomController(gl, canvas, regenerateFractal);
 
 function regenerateFractal() {
     let zoomLevel = zoomController.getZoomLevel(); 
-    let detailLevel = numPoints * zoomLevel; // adjust this calculation as needed.
+    let center = zoomController.getCenter();
     if (bufferId) {
         gl.deleteBuffer(bufferId); // clean up previous buffer
     }
-    bufferId = generateSierpinskiPoints(gl, detailLevel);
+
+    bufferId = generateSierpinskiPoints(gl, numPoints, zoomLevel, center.x, center.y);
     render();
 }
 
@@ -28,9 +29,7 @@ function render() {
 
 let bufferId;
 
-zoomController = new ZoomController(gl, regenerateFractal);
 zoomController.initialize(canvas);
-
 
 // program for vertex shaders
 const vsSource = `
@@ -48,7 +47,6 @@ const fsSource = `
         gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); // black color
     }
 `;
-
 
 // shader program where all the lighting for vertices are made.
 const shaderProgram = initShaderProgram(gl, vsSource, fsSource);

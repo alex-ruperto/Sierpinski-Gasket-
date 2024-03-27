@@ -1,15 +1,16 @@
 // define what the vertices of the initial triangle are.
 
 
-export function generateSierpinskiPoints(gl, numPoints) {
+export function generateSierpinskiPoints(gl, numPoints, zoomLevel, centerX, centerY) {
     const vertices = new Float32Array([ // Float32Array is more efficient because it's fixed size and data type is known. Also directly maps to GPU since they handle floating-point operations in parallel.
-    -1.0, -1.0, // 1st vertex
-    0.0, 1.0, // 2nd vertex
-    1.0, -1.0 // third vertex
-    ])
+        (-1.0 / zoomLevel) + centerX, (-1.0 /zoomLevel) + centerY, // vertex 1
+        (0.0 / zoomLevel) + centerX, (1.0 /zoomLevel) + centerY, // vertex 2
+        (1.0 / zoomLevel) + centerX, (-1.0 /zoomLevel) + centerY, // vertex 3
+
+    ]) 
     
     let points = [];
-    let currentPoint = [0.25, 0.5]; // initial point inside the triangle
+    let currentPoint = [(0.25 / zoomLevel) + centerX, (0.5 / zoomLevel) + centerY]; // initial point will be adjusted based on zoom and center.
 
     for (let i = 0; i < numPoints; i++){ // iterate from 0 to 5000 exclusive
         // pick a random vertex
@@ -17,8 +18,8 @@ export function generateSierpinskiPoints(gl, numPoints) {
         let vertex = [vertices[j * 2], vertices[j * 2 + 1]];
 
         currentPoint = [
-            (currentPoint[0] + vertex[0]) / 2,
-            (currentPoint[1] + vertex[1]) / 2,
+            ((currentPoint[0] + vertex[0]) / 2),
+            ((currentPoint[1] + vertex[1]) / 2),
         ];
 
         // add a midpoint to the list of points
