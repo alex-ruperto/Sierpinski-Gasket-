@@ -6,6 +6,31 @@ import { ZoomController } from './zoom-controller.js';
 
 const canvas = document.getElementById("sierpinski-canvas");
 const gl = initWebGL(canvas);
+const numPoints = 50000
+let zoomController;
+
+function regenerateFractal() {
+    let zoomLevel = zoomController.getZoomLevel(); 
+    let detailLevel = numPoints * zoomLevel; // adjust this calculation as needed.
+    if (bufferId) {
+        gl.deleteBuffer(bufferId); // clean up previous buffer
+    }
+    bufferId = generateSierpinskiPoints(gl, detailLevel);
+    render();
+}
+
+function render() {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
+    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+    gl.drawArrays(gl.POINTS, 0, numPoints);
+}
+
+let bufferId;
+
+zoomController = new ZoomController(gl, regenerateFractal);
+zoomController.initialize(canvas);
+
 
 // program for vertex shaders
 const vsSource = `
@@ -33,22 +58,4 @@ gl.useProgram(shaderProgram);
 let position = gl.getAttribLocation(shaderProgram, 'aPosition');
 gl.enableVertexAttribArray(position);
 
-function regenerateFractal() {
-    let zoomLevel = zoomController.getZoomLevel(); 
-    let detailLevel = 50000 * zoomLevel; // adjust this calculation as needed.
-    if (bufferId) {
-        gl.deleteBuffer(bufferId); // clean up previous buffer
-    }
-    bufferId = generateSierpinskiPoints(gl, detailLevel);
-    render();
-}
-
-function render() {
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-    gl.drawArrays(gl.POINTS, 0, numPoints)
-}
-
-let bufferId;
 regenerateFractal();
