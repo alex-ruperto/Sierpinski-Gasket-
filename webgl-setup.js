@@ -7,8 +7,8 @@ export function initWebGL(canvas) {
         return null;
     }
 
-    // clear color to black, 100% opaque
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    // clear color to white, 100% opaque
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);
 
     // clear the color buffer with a specified color
     gl.clear(gl.COLOR_BUFFER_BIT);
