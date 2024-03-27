@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "http-serve": "^1.0.1"
+    "http-server": "^1.0.1"
   }
 }
