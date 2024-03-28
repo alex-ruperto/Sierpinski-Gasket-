@@ -2,11 +2,38 @@
 <html>
     <head>
         <title>Sierpinski Gasket</title>
+        <style>
+            body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f0;
+        }
+        #canvas-container {
+            /* Adjust the max-width and max-height as needed */
+            max-width: 100%;
+            max-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
+            background: #fff;
+            /* Removes the default canvas border */
+            border: none; 
+        }
+        </style>
     </head>
+
     <body>
-        <canvas id="sierpinski-canvas" width="640" height="480">
-            Your browser does not support the HTML5 <code>&lt;canvas&gt;</code>
-        </canvas>
+        <div id="canvas-container">
+            <canvas id="sierpinski-canvas">
+                Your browser does not support the HTML5 <code>&lt;canvas&gt;</code>
+            </canvas>
+        </div>
+        <script type="module" src="canvas-resizer.js"></script>
         <script type="module" src="main.js"></script>
     </body>
 </html>

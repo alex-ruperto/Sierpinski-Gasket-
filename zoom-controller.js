@@ -6,25 +6,15 @@ export class ZoomController {
         this.zoomLevel = 1; // initial zoom level.
         this.centerX = 0; // initial center X
         this.centerY = 0; // initial center Y
-        this.setupMouseHandlers();
+        this.setupMouseHandlers(canvas);
     }
 
-    initialize(canvas) {
-        canvas.addEventListener('wheel', (event) => {
-            event.preventDefault();
-            const zoomDirection = Math.sign(event.deltaY) * -1; // invert deltaY to get natural zoom direction
-            this.zoomLevel = adjustZoomLevel(zoomLevel, zoomDirection);
-            this.zoomLevel = Math.max(1, this.zoomLevel);
-            this.regenerateFractal();
-        });
-    }
-
-    setupMouseHandlers(){
-        this.canvas.addEventListener('mousemove', (e) => {
+    setupMouseHandlers(canvas){
+        canvas.addEventListener('mousemove', (e) => {
             // update mouse position based on e.clientX, e.clientY
         });
 
-        this.canvas.addEventListener('wheel', (e) => {
+        canvas.addEventListener('wheel', (e) => {
             e.preventDefault();
             const rect = this.canvas.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
@@ -35,15 +25,13 @@ export class ZoomController {
         });
     }
 
-
-
     adjustZoom(deltaY, mouseX, mouseY){
         // adjust as needed
         const zoomSensitivity = 0.0005;
         const zoomFactor = deltaY * zoomSensitivity;
 
         // calculate zoom level
-        this.zoomLevel -= zoomFactor;
+        this.zoomLevel += zoomFactor; // += will set it so that deltaY positive zooms in and deltaY negative zooms out.
         this.zoomLevel = Math.max(this.zoomLevel, 0.1); // prevent zoom level from going below 0.1
 
         // Convert screen coordinates (mouseX, mouseY) to fractal coordinates

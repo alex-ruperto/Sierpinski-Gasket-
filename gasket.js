@@ -2,15 +2,16 @@
 
 
 export function generateSierpinskiPoints(gl, numPoints, zoomLevel, centerX, centerY) {
+    const scale = 1.0;
     const vertices = new Float32Array([ // Float32Array is more efficient because it's fixed size and data type is known. Also directly maps to GPU since they handle floating-point operations in parallel.
-        (-1.0 / zoomLevel) + centerX, (-1.0 /zoomLevel) + centerY, // vertex 1
-        (0.0 / zoomLevel) + centerX, (1.0 /zoomLevel) + centerY, // vertex 2
-        (1.0 / zoomLevel) + centerX, (-1.0 /zoomLevel) + centerY, // vertex 3
+        (-scale / zoomLevel) + centerX, (-scale /zoomLevel) + centerY, // vertex 1
+        0.0 + centerX, (scale /zoomLevel) + centerY, // vertex 2
+        (scale / zoomLevel) + centerX, (-scale /zoomLevel) + centerY, // vertex 3
 
     ]) 
     
     let points = [];
-    let currentPoint = [(0.25 / zoomLevel) + centerX, (0.5 / zoomLevel) + centerY]; // initial point will be adjusted based on zoom and center.
+    let currentPoint = [centerX, (centerY - scale / zoomLevel) / 2]; // initial point will be adjusted based on zoom and center.
 
     for (let i = 0; i < numPoints; i++){ // iterate from 0 to 5000 exclusive
         // pick a random vertex
