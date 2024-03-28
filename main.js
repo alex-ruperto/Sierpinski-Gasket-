@@ -6,7 +6,7 @@ import { ZoomController } from './zoom-controller.js';
 
 const canvas = document.getElementById("sierpinski-canvas");
 export const gl = initWebGL(canvas);
-const numPoints = 50000
+const numPoints = 300000
 let zoomController = new ZoomController(gl, canvas, regenerateFractal);
 
 export function regenerateFractal() {
